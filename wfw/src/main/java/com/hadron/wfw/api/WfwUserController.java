@@ -13,9 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.hadron.wfw.HttpAPIService;
 import com.hadron.wfw.ResultData;
 import com.hadron.wfw.model.User;
+import com.hadron.wfw.model.UserJob;
+import com.hadron.wfw.model.UserJobLevel;
+import com.hadron.wfw.model.UserJobLevelRepository;
+import com.hadron.wfw.model.UserJobRepository;
+import com.hadron.wfw.model.UserPosition;
+import com.hadron.wfw.model.UserPositionRepository;
 import com.hadron.wfw.model.WfwFormField;
 import com.hadron.wfw.model.WfwOrg;
 import com.hadron.wfw.model.WfwOrgUser;
@@ -66,6 +73,12 @@ public class WfwUserController {
     
     @Autowired
    	private UserRepository userRepository;
+    @Autowired
+   	private UserJobRepository userJobRepository;
+    @Autowired
+   	private UserPositionRepository userPositionRepository;
+    @Autowired
+   	private UserJobLevelRepository userJobLevelRepository;
     
     private static Gson gson = new GsonBuilder().create();
 
@@ -166,6 +179,95 @@ public class WfwUserController {
      
     }
     
+    /**
+     * Add string.
+     *
+     * @param user the user
+     * @return the string
+     * @throws Exception 
+     */
+    @RequestMapping("/createUserPosition")
+	@ResponseBody
+    public ResultData createUserPosition(UserPosition entity) throws Exception {
+    	userPositionRepository.save(entity);
+       // producer.send();
+        
+   	    // 声明httpPost请求
+        //HttpPost httpPost = new HttpPost("http://www.baidu.com");
+		//httpClient.execute(httpPost);
+		//httpAPIService.doGet("http://www.baidu.com");
+		//httpAPIService.doGet("http://10.0.0.79:30093/apm/add?id="+user.getId()+"&userName="+user.getUserName()+"&password=1&age=1");
+		//httpAPIService.doGet("http://10.0.0.79:30095/mall/addOrder?id="+user.getId()+"&name="+user.getUserName()+"&money=2&fee=2");
+        //return gson.toJson("200");
+    	ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(entity);
+		return data;
+     
+    }
+    
+    
+    /**
+     * Add string.
+     *
+     * @param user the user
+     * @return the string
+     * @throws Exception 
+     */
+    @RequestMapping("/createUserJob")
+	@ResponseBody
+    public ResultData createUserJob(UserJob entity) throws Exception {
+    	userJobRepository.save(entity);
+       // producer.send();
+        
+   	    // 声明httpPost请求
+        //HttpPost httpPost = new HttpPost("http://www.baidu.com");
+		//httpClient.execute(httpPost);
+		//httpAPIService.doGet("http://www.baidu.com");
+		//httpAPIService.doGet("http://10.0.0.79:30093/apm/add?id="+user.getId()+"&userName="+user.getUserName()+"&password=1&age=1");
+		//httpAPIService.doGet("http://10.0.0.79:30095/mall/addOrder?id="+user.getId()+"&name="+user.getUserName()+"&money=2&fee=2");
+        //return gson.toJson("200");
+    	ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(entity);
+		return data;
+     
+    }
+    
+    
+    
+    /**
+     * Add string.
+     *
+     * @param user the user
+     * @return the string
+     * @throws Exception 
+     */
+    @RequestMapping("/createUserJobLevel")
+	@ResponseBody
+    public ResultData createUserJobLevel(UserJobLevel entity) throws Exception {
+    	userJobLevelRepository.save(entity);
+       // producer.send();
+        
+   	    // 声明httpPost请求
+        //HttpPost httpPost = new HttpPost("http://www.baidu.com");
+		//httpClient.execute(httpPost);
+		//httpAPIService.doGet("http://www.baidu.com");
+		//httpAPIService.doGet("http://10.0.0.79:30093/apm/add?id="+user.getId()+"&userName="+user.getUserName()+"&password=1&age=1");
+		//httpAPIService.doGet("http://10.0.0.79:30095/mall/addOrder?id="+user.getId()+"&name="+user.getUserName()+"&money=2&fee=2");
+        //return gson.toJson("200");
+    	ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(entity);
+		return data;
+     
+    }
     
     
     
@@ -218,6 +320,74 @@ public class WfwUserController {
 		data.setData(wfwUsers);
 		return data;
 	}
+	
+	  /**
+		 * 获取表单
+		 *
+		 * @param user
+		 *            the user
+		 * @return the string
+		 */
+		 //@RequestMapping("/getFormFields")
+	    
+		@GetMapping("/getUserPositionList/{id}")
+		@ResponseBody
+		public ResultData getUserPositionList(@PathVariable String id ) {
+			List<UserPosition> wfwUsers  = userPositionRepository.findAll(); 
+
+			ResultData data = new ResultData();
+			data.setCode(200);
+			data.setSuccess(true);
+			data.setMessage("成功");
+			data.setData(wfwUsers);
+			return data;
+		}
+		
+		  /**
+		 * 获取表单
+		 *
+		 * @param user
+		 *            the user
+		 * @return the string
+		 */
+		 //@RequestMapping("/getFormFields")
+	    
+		@GetMapping("/getUserJobList/{id}")
+		@ResponseBody
+		public ResultData getUserJobList(@PathVariable String id ) {
+			List<UserJob> wfwUsers  = userJobRepository.findAll(); 
+
+			ResultData data = new ResultData();
+			data.setCode(200);
+			data.setSuccess(true);
+			data.setMessage("成功");
+			data.setData(wfwUsers);
+			return data;
+		}
+		
+		  /**
+		 * 获取表单
+		 *
+		 * @param user
+		 *            the user
+		 * @return the string
+		 */
+		 //@RequestMapping("/getFormFields")
+	    
+		@GetMapping("/getUserJobLevelList/{id}")
+		@ResponseBody
+		public ResultData getUserJobLevelList(@PathVariable String id ) {
+			List<UserJobLevel> wfwUsers  = userJobLevelRepository.findAll(); 
+
+			ResultData data = new ResultData();
+			data.setCode(200);
+			data.setSuccess(true);
+			data.setMessage("成功");
+			data.setData(wfwUsers);
+			return data;
+		}
+		
+		
 	
 	@GetMapping("/getRoleUserList/{id}")
 	@ResponseBody
@@ -283,6 +453,22 @@ public class WfwUserController {
 		data.setSuccess(true);
 		data.setMessage("成功");
 		data.setData(wfwUsers);
+		return data;
+	}
+	
+	@GetMapping("/getUser/{id}")
+	@ResponseBody
+	public ResultData getUser(@PathVariable String id ) {
+
+		User user  = userRepository.findById(Integer.parseInt(id));
+//		WfwFormV formV = new WfwFormV();
+//		formV.setFormfield(formField);
+
+		ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(user);
 		return data;
 	}
     

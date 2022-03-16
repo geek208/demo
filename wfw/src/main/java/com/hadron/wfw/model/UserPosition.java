@@ -24,21 +24,16 @@ import lombok.NoArgsConstructor;
  */
 
 @Entity
-@Table(name = "t_wfw_org")
+@Table(name = "t_user_position")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor 
-public class WfwOrg {
+public class UserPosition {
 
     
     @Id
     @GeneratedValue
     private long id;
-    //上级部门
-    private long parentId;
-    //组织负责人
-    //
-    private String managerId;
-    private String chargeId;
-    private String orgName;
+    private String name;
+    private Integer status =1;
 }

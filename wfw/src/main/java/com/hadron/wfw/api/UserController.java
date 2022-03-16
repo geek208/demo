@@ -9,6 +9,7 @@ import com.hadron.wfw.Utils;
 import com.hadron.wfw.cache.UserCache;
 import com.hadron.wfw.model.User;
 import com.hadron.wfw.model.UserVO;
+import com.hadron.wfw.model.WfwFlow;
 import com.hadron.wfw.model.WfwUser;
 import com.hadron.wfw.service.UserRepository;
 import com.hadron.wfw.service.UserService;
@@ -90,6 +91,29 @@ public class UserController {
     }
     
     /**
+	 * 获取表单
+	 *
+	 * @param user
+	 *            the user
+	 * @return the string
+	 */
+	@RequestMapping("/userList")
+	@ResponseBody
+	public ResultData getUserList() {
+
+		List<User> users = userRepository.findAll();
+
+		// WfwFormV formV =new WfwFormV();
+		// formV.setFormfield(formField);
+		ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(users);
+		return data;
+	}
+    
+    /**
      * cache
      *
      * @param auth
@@ -117,12 +141,12 @@ public class UserController {
      */
     @RequestMapping("/createUser")
 	@ResponseBody
-    public ResultData createUser(User user) throws Exception {
+    public ResultData createUser(@RequestBody User user) throws Exception {
     	
     	
     	log.debug("pre md5Hex{} after {}"+user.getPassword(),DigestUtils.md5Hex(StringUtils.trim(user.getPassword())));
     	
-    	user.setPassword(DigestUtils.md5Hex(StringUtils.trim(user.getPassword())));
+    	user.setPassword(DigestUtils.md5Hex(DigestUtils.md5Hex(StringUtils.trim(user.getPassword()))));
     	userRepository.save(user);
        // producer.send();
         

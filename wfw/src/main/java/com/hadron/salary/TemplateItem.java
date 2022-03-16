@@ -1,4 +1,4 @@
-package com.hadron.wfw.model;
+package com.hadron.salary;
 
 
 import java.util.Date;

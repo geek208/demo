@@ -31,6 +31,12 @@ public class User extends BaseEntity implements Serializable {
     private String remark;
     private String roleId;
     private String orgId;
+    //岗位Id
+    private String positionId;
+    //职位ID
+    private String jobId;
+    //职级
+    private String levelId;
 
 
 

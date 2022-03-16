@@ -24,5 +24,5 @@ public interface RoleRepository extends JpaRepository<WfwRole, Long> {
      */
 	WfwRole findById(long id);
 	
-  void save(WfwRoleUser au);
+    void save(WfwRoleUser au);
 }
