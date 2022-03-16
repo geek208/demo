@@ -1,0 +1,65 @@
+{
+  "id": "2255379",
+  "name": "demo",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "385603",
+      "name": "群蜂支付宝图标",
+      "font_class": "zhifubaotubiao",
+      "unicode": "e681",
+      "unicode_decimal": 59009
+    },
+    {
+      "icon_id": "9306311",
+      "name": "微信支付",
+      "font_class": "weixinzhifu",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "16809152",
+      "name": "线性支付宝图标",
+      "font_class": "xianxingzhifubaotubiao",
+      "unicode": "e706",
+      "unicode_decimal": 59142
+    },
+    {
+      "icon_id": "9826657",
+      "name": "错误",
+      "font_class": "cuowu",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "1365848",
+      "name": "通过",
+      "font_class": "tongguo",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "1137427",
+      "name": "允许",
+      "font_class": "yunxu",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "4893451",
+      "name": "允许",
+      "font_class": "yunxu1",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "18371131",
+      "name": "禁止",
+      "font_class": "jinzhi",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    }
+  ]
+}
