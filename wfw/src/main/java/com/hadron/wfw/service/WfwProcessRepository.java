@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hadron.wfw.model.WfwActivity;
 import com.hadron.wfw.model.WfwActivityUser;
-import com.hadron.wfw.model.WfwFormField;
+import com.hadron.wfw.model.UserField;
 import com.hadron.wfw.model.WfwProcess;
 
 /**

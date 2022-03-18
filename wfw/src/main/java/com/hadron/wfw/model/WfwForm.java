@@ -31,7 +31,6 @@ import lombok.Setter;
 @Entity
 @Builder
 @Table(name = "t_wfw_form")
-//@Data
 @Getter
 @Setter
 @AllArgsConstructor
@@ -42,8 +41,8 @@ public class WfwForm extends BaseEntity implements Serializable{
 //    private long id;
     //订单流水号
     private String flowId;
-//    private Date createDate;
-//    private Date updateDate;
+    private Date createDate;
+    private Date updateDate;
     //付款流水号
    
     private String name;

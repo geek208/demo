@@ -23,7 +23,8 @@ import com.hadron.wfw.model.UserJobLevelRepository;
 import com.hadron.wfw.model.UserJobRepository;
 import com.hadron.wfw.model.UserPosition;
 import com.hadron.wfw.model.UserPositionRepository;
-import com.hadron.wfw.model.WfwFormField;
+import com.hadron.wfw.model.WfwAction;
+import com.hadron.wfw.model.UserField;
 import com.hadron.wfw.model.WfwOrg;
 import com.hadron.wfw.model.WfwOrgUser;
 import com.hadron.wfw.model.WfwRole;
@@ -32,6 +33,7 @@ import com.hadron.wfw.model.WfwUser;
 import com.hadron.wfw.producer.Producer;
 import com.hadron.wfw.service.OrgRepository;
 import com.hadron.wfw.service.RoleRepository;
+import com.hadron.wfw.service.UserFieldRepository;
 import com.hadron.wfw.service.UserRepository;
 import com.hadron.wfw.service.WfwFlowRepository;
 import com.hadron.wfw.service.WfwUserRepository;
@@ -73,6 +75,12 @@ public class WfwUserController {
     
     @Autowired
    	private UserRepository userRepository;
+    
+    @Autowired
+   	private UserFieldRepository userFieldRepository;
+    
+    
+    
     @Autowired
    	private UserJobRepository userJobRepository;
     @Autowired
@@ -130,6 +138,8 @@ public class WfwUserController {
     @RequestMapping("/createUser")
 	@ResponseBody
     public ResultData createUser(WfwUser user) throws Exception {
+    	WfwAction action =new WfwAction();
+    			//action.setCreateTime(createTime);
         userService.save(user);
        // producer.send();
         
@@ -282,6 +292,35 @@ public class WfwUserController {
 	@ResponseBody
     public ResultData createOrg(WfwOrg org) throws Exception {
     	orgRepository.save(org);
+       // producer.send();
+        
+   	    // 声明httpPost请求
+        //HttpPost httpPost = new HttpPost("http://www.baidu.com");
+		//httpClient.execute(httpPost);
+		//httpAPIService.doGet("http://www.baidu.com");
+		//httpAPIService.doGet("http://10.0.0.79:30093/apm/add?id="+user.getId()+"&userName="+user.getUserName()+"&password=1&age=1");
+		//httpAPIService.doGet("http://10.0.0.79:30095/mall/addOrder?id="+user.getId()+"&name="+user.getUserName()+"&money=2&fee=2");
+        //return gson.toJson("200");
+    	ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(org);
+		return data;
+    }
+    
+    
+    /**
+     * Add string.
+     *
+     * @param user the user
+     * @return the string
+     * @throws Exception 
+     */
+    @RequestMapping("/createUserfield")
+	@ResponseBody
+    public ResultData createUserfield(UserField org) throws Exception {
+    	userFieldRepository.save(org);
        // producer.send();
         
    	    // 声明httpPost请求

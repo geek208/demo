@@ -1,4 +1,4 @@
-package com.hadron.salary;
+package com.hadron.wfw.model;
 
 
 import java.util.Date;
@@ -25,11 +25,11 @@ import lombok.NoArgsConstructor;
  * @author <a href="https://github.com/liaozihong" style="background: #55a7e3;">Liaozihong</a>
  */
 @Entity
-@Table(name = "t_salary_detail")
+@Table(name = "t_salary_process")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor 
-public class SalaryDetail {
+public class SalaryProcess {
     @Id
     @GeneratedValue
     private long id;
@@ -38,24 +38,12 @@ public class SalaryDetail {
     private String circle;
     private String cpyId;
     private String userId;
-    private String batchId;
+    private String templateId;
     
-    //固定字段
-    private String basePay;
-    private String floatPay;
+    //private String circle;
     
-    private String supportOld;
-    private String childrenEdu;
-    
-    //动态扩展字段
-    private String field1;
-    private String field2;
-    private String field3;
-    private String field4;
-    private String field5;
-    private String field6;
-    private String field7;
-    private String field8;
-    private String field9;
-    private String field10;
+    private String status;
+    //处理阶段
+    private String phase;
+ 
 }

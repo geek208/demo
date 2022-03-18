@@ -11,9 +11,7 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 
@@ -22,42 +20,37 @@ import lombok.Setter;
  * 
  * @author xuychao
  * @date 2022年3月15日
- * @classname WfwProcess.java
+ * @classname WfwFormField.java
  * @email xuychao@163.com  git@github.com:geek208/wfw.git
  */
 
+
 @Entity
-@Table(name = "t_wfw_process")
+@Table(name = "t_user_field")
 @Data
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor 
-public class WfwProcess {
+public class UserField {
     @Id
     @GeneratedValue
     private long id;
     //订单流水号
-    //private String pid;
+
+    //private String flowId;
+    private String userId;
+    private String parentId;
+    private String orgId;
+    private String groupId;
+    
     private Date createDate;
     private Date updateDate;
     //付款流水号
-    private String taskStatus;
-    private int doneNum;
-    private int toDoNum;
-    private String currentActivityId;
-    private String currentActivityName;
-    private String nextActivityId;
-    private String nextActivityName;
-    
-//    private String preUserId;
-//    private String currentUserId;
-//    private String nextUserId;
-    
-    
-    private String pName;
-    private String flowId;
+
+    private String name;
+    private String cnName;
+    private String fieldType;
+    private String fieldvalue;
      //未支付 0,支付成功 1,支付失败 2,待退款 3,已退款 4
     private int status;
-    //private int amount;
+    //private int amount;;
 }

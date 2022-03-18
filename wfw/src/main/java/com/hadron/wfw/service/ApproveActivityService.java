@@ -184,11 +184,11 @@ public class  ApproveActivityService implements ActivityService{
 			//本节点所有人已经处理完
 			System.err.println("会签="+current.getApproveType());
 			
-			List list = wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+			 int list = wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
 			
 			
 			//未全部处理
-			if(list != null && list.size()>0){
+			if(list >0){
 				
 				return 0;
 //				ResultData data = new ResultData();

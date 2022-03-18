@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hadron.wfw.model.WfwActivity;
 import com.hadron.wfw.model.WfwActivityUser;
-import com.hadron.wfw.model.WfwFormField;
+import com.hadron.wfw.model.UserField;
 import com.hadron.wfw.model.WfwTask;
 
 
@@ -44,9 +44,15 @@ public interface WfwTaskRepository extends JpaRepository<WfwTask, Long> {
 	
 	@Query(value = "select * from t_wfw_task  WHERE user_id =?1 AND status =1",nativeQuery = true)
 	List <WfwTask>   findDoneTask(String  userId);
+
+	@Query(value = "select count(*) from t_wfw_task  WHERE pid =?1  AND  current_id =?2 AND status =0",nativeQuery = true)
+	int  findTaskNotFinish(String  pid,String activityId);
 	
-	@Query(value = "select * from t_wfw_task  WHERE pid =?1  AND  current_id =?2 AND status =0",nativeQuery = true)
-	List <WfwTask>   findTaskNotFinish(String  pid,String activityId);
+	@Query(value = "select count(*) from t_wfw_task  WHERE pid =?1  AND  current_id =?2 AND status =1",nativeQuery = true)
+	int   findTaskFinish(String  pid,String activityId);
 	
+	@Query(value = "SELECT count(t.id) FROM t_wfw_process AS p ,t_wfw_task AS t WHERE p.id = t.pid AND p.current_activity_id = t.current_id AND p.id =?1 AND t.status =?2",nativeQuery = true)
+	int   countTaskFinish(String  pid,int status);
+	//SELECT count(t.id) FROM t_wfw_process AS p ,t_wfw_task AS t WHERE p.id = t.pid AND p.current_activity_id = t.current_id AND 't.status' =0 AND p.id =1256
 
 }

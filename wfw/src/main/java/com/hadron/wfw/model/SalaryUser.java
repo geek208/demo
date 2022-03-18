@@ -1,4 +1,4 @@
-package com.hadron.salary;
+package com.hadron.wfw.model;
 
 
 import java.util.Date;
@@ -25,29 +25,19 @@ import lombok.NoArgsConstructor;
  * @author <a href="https://github.com/liaozihong" style="background: #55a7e3;">Liaozihong</a>
  */
 @Entity
-@Table(name = "t_salary_template")
+@Table(name = "t_salary_User")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor 
-public class SalaryTemplate {
+public class SalaryUser {
     @Id
     @GeneratedValue
     private long id;
-    //基本字段
-    private String tempalteName;
-    private String cpyId;
-    //运营商Id
-    private String opId;
-    //计薪周期
-    private String circle;
+    //订单流水号
+    private String userId;
+    private String templateId;
+    //1--表示算薪，0-表示排除算薪 
     
-    //固定字段
-    private String basePay;
-    private String floatPay;
-    
-    //动态扩展字段
-    //算薪人员清单
-    private String includeList;
-    //排除人员清单
-    private String excluSionList;
+    private String include;
+
 }

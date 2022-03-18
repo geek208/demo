@@ -37,6 +37,12 @@ public interface WfwUserRepository extends JpaRepository<WfwUser, Long> {
   	 @Query(value = "select  DISTINCT u.*  FROM t_wfw_org,t_wfw_user AS u ,t_wfw_org_user WHERE u.id = t_wfw_org_user.user_id AND t_wfw_org_user.org_id = t_wfw_org.id AND t_wfw_org.id = ?1",nativeQuery = true )
   	 List<Map<String,String>>    findByOrg(String  orgId);
   	 
+  	 
+  	//查找算薪人员
+  	 @Query(value = "select  DISTINCT u.*  FROM t_salary_template p,t_wfw_user AS u ,t_salary_user s WHERE u.id = s.user_id AND s.template_id = p.id AND p.id = ?1",nativeQuery = true )
+  	 List<Map<String,String>>    findByTemplateId(String  orgId);
+  	 
+  	 
     //SELECT
 //    u.*
 //    FROM

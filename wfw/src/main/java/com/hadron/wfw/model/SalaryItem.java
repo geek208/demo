@@ -1,4 +1,4 @@
-package com.hadron.salary;
+package com.hadron.wfw.model;
 
 
 import java.util.Date;
@@ -26,19 +26,41 @@ import lombok.NoArgsConstructor;
  */
 
 @Entity
-@Table(name = "t_template_item")
+@Table(name = "t_salary_item")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor 
-public class TemplateItem {
+public class SalaryItem {
     @Id
     @GeneratedValue
     private long id;
     private long tempId;
+    private String groupId;
+    private String cpyId;
+    private String userId;
+    
+    private String parentId;
+    
+    private String status;
+    
+    //计算Id
+    private String pId;
+    
     //订单流水号
     private String fieldName;
     private String fieldType;
-    private String defaultValue;
+    private String fieldValue;
+
+    private String reffieldColumn;
+    private String reffieldTable;
+    
+    private String refId;
+    
+    //0-引用 1-导入 2-公式
+    private String rulesType;
+    //计算公式，可以按列名或者 列的顺序
+    private String rules;
+    
     //顺序
     //private String order;
     //是否显示
@@ -46,6 +68,7 @@ public class TemplateItem {
     //税前税后
     private String isTax;
     private String isSalaryBill;
-    private String groupId;
+    
+ 
 
 }
