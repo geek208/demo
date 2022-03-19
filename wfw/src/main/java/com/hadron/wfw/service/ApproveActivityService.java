@@ -125,7 +125,7 @@ public class  ApproveActivityService implements ActivityService{
 		
 		// wfwProcessRepository.
 		// 更新为已处理
-		wfwTaskRepository.updateTaskStatus(taskId, "1");
+		wfwTaskRepository.updateTaskStatus(taskId, "1","处理意见");
 		
 		// 查看当前进程
 		WfwProcess process = wfwProcessRepository.findById(Long.parseLong(task.getPid()));

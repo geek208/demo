@@ -33,11 +33,14 @@ public interface WfwTaskRepository extends JpaRepository<WfwTask, Long> {
 	@Transactional
 	@Modifying
 	//@Query("update t_stock   set count = count-1 where id in ids",nativeQuery = true)
-	@Query(value = "UPDATE t_wfw_task SET status =?2   WHERE id =?1",nativeQuery = true)
-	public void updateTaskStatus(String taskId,String status);
+	@Query(value = "UPDATE t_wfw_task SET status =?2,comments =?3  WHERE id =?1",nativeQuery = true)
+	public void updateTaskStatus(String taskId,String status,String comments);
 	
 	@Query(value = "select * from t_wfw_task  WHERE user_id =?1",nativeQuery = true)
 	List <WfwTask>   findTask(String  userId);
+	
+	@Query(value = "select * from t_wfw_task  WHERE pid =?1 AND status =1",nativeQuery = true)
+	List <WfwTask>   findPorcessTask(String  pid);
 	
 	@Query(value = "select * from t_wfw_task  WHERE user_id =?1 AND status =?2",nativeQuery = true)
 	List <WfwTask>   findTodoTask(String  userId,String status);

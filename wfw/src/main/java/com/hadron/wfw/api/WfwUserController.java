@@ -16,7 +16,7 @@ import com.google.gson.GsonBuilder;
 
 import com.hadron.wfw.HttpAPIService;
 import com.hadron.wfw.ResultData;
-import com.hadron.wfw.model.User;
+import com.hadron.wfw.model.SysUser;
 import com.hadron.wfw.model.UserJob;
 import com.hadron.wfw.model.UserJobLevel;
 import com.hadron.wfw.model.UserJobLevelRepository;
@@ -350,7 +350,7 @@ public class WfwUserController {
 	@GetMapping("/getUserList/{id}")
 	@ResponseBody
 	public ResultData getUserList(@PathVariable String id ) {
-		List<User> wfwUsers  = userRepository.findAll(); 
+		List<SysUser> wfwUsers  = userRepository.findAll(); 
 
 		ResultData data = new ResultData();
 		data.setCode(200);
@@ -432,7 +432,7 @@ public class WfwUserController {
 	@ResponseBody
 	public ResultData getRoleUserList(@PathVariable String id ) {
 
-		List<User> wfwUsers  = userRepository.findAll();
+		List<SysUser> wfwUsers  = userRepository.findAll();
 //		WfwFormV formV = new WfwFormV();
 //		formV.setFormfield(formField);
 
@@ -483,7 +483,7 @@ public class WfwUserController {
 	@ResponseBody
 	public ResultData getOrgUserList(@PathVariable String id ) {
 
-		List<User> wfwUsers  = userRepository.findAll();
+		List<SysUser> wfwUsers  = userRepository.findAll();
 //		WfwFormV formV = new WfwFormV();
 //		formV.setFormfield(formField);
 
@@ -499,7 +499,7 @@ public class WfwUserController {
 	@ResponseBody
 	public ResultData getUser(@PathVariable String id ) {
 
-		User user  = userRepository.findById(Integer.parseInt(id));
+		SysUser user  = userRepository.findById(Integer.parseInt(id));
 //		WfwFormV formV = new WfwFormV();
 //		formV.setFormfield(formField);
 

@@ -1,4 +1,4 @@
-package com.hadron.wfw.model;
+package com.hadron.app;
 
 
 import java.util.List;
@@ -19,10 +19,16 @@ import com.hadron.wfw.model.WfwTask;
  * @email xuychao@163.com  git@github.com:geek208/wfw.git
  */
 @Repository
-public interface UserJobRepository extends JpaRepository<UserJob, Integer> {
+public interface PlatformAppRepository extends JpaRepository<PlatformApp, Integer> {
 	
-	@Query(value = "select * from t_wfw_user  WHERE role_id =?1",nativeQuery = true)
-	List <UserJob>   findUserByRole(String  userId);
-	UserJob findById(int id);
+	@Query(value = "select * from t_platform_app  WHERE role_id =?1",nativeQuery = true)
+	List <PlatformApp>   findUserByRole(String  userId);
+	
+	
+	PlatformApp findById(int id);
+	
+	void save(OrderApp orderApp);
+	
+	void save(PublishApp publishApp);
 	
 }

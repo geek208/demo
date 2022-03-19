@@ -4,7 +4,12 @@ package com.hadron.wfw.model;
 import lombok.*;
 
 import javax.persistence.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -14,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "t_wfw_user")
-public class User extends BaseEntity implements Serializable {
+public class SysUser extends BaseEntity implements Serializable {
  
     @Column(unique = true)
     private String email;
@@ -54,4 +59,6 @@ public class User extends BaseEntity implements Serializable {
         userVO.setPassword(null);
         return userVO;
     }
+
+
 }

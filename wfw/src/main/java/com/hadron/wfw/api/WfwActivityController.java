@@ -40,7 +40,7 @@ import com.hadron.wfw.Result;
 import com.hadron.wfw.ResultData;
 import com.hadron.wfw.cache.UserCache;
 import com.hadron.wfw.model.EasyPay;
-import com.hadron.wfw.model.User;
+import com.hadron.wfw.model.SysUser;
 import com.hadron.wfw.model.UserVO;
 import com.hadron.wfw.model.WfwActivity;
 import com.hadron.wfw.model.WfwActivityRules;
@@ -532,7 +532,7 @@ public class WfwActivityController {
 	@ResponseBody
 	public ResultData addTaskAct(WfwProcess process, WfwActivity current) {
 
-		 List<User> users = new ArrayList();
+		 List<SysUser> users = new ArrayList();
 
 		// userRepository.findUserByRole(current.getUserId());
 		if (current.getUserType().equals(OwerType.ROLE.getValue())) {
@@ -561,7 +561,7 @@ public class WfwActivityController {
 		// 添加到任务列表
         if(users !=null && users.size() >0){
         	for (Iterator iterator = users.iterator(); iterator.hasNext();) {
-    			User user = (User) iterator.next();
+    			SysUser user = (SysUser) iterator.next();
     			WfwTask task = new WfwTask();
     			task.setTaskName(process.getPName() + "-" + current.getName());
     			// task.setPid(String.valueOf(process.getId()));
@@ -574,7 +574,16 @@ public class WfwActivityController {
     			task.setCurrentId(process.getCurrentActivityId());
     			wfwTaskRepository.save(task);
     		}
-
+        
+        	
+        //没有找到 审批者，流程结束
+        }else{
+        	
+        	WfwActivity end = wfwActivityRepository.findEndByflowId(process.getFlowId());
+        	process.setCurrentActivityId(String.valueOf(end.getId()));
+        	process.setCurrentActivityName(end.getName());
+        	System.err.println("流程结束=" + process.getCurrentActivityId() + "节点名称===" + process.getCurrentActivityName());
+        	
         }
 	
 		ResultData data = new ResultData();
@@ -642,19 +651,23 @@ public class WfwActivityController {
 	 *            the user
 	 * @return the string
 	 */
-	// @RequestMapping("/doTask")
-	@GetMapping("/dotask/{id}")
+	 
+	@SuppressWarnings("rawtypes")
+	//@GetMapping("/dotask/{id}")
+	@RequestMapping("/doTask")
 	@ResponseBody
-	public ResultData doTask(@PathVariable String id) {
+	public ResultData doTask(@RequestBody WfwTask obj) {
 
 		// doTask2(id);
 
 		// 查看当前任务
-		WfwTask task = wfwTaskRepository.findById(Long.parseLong(id));
+		WfwTask task = wfwTaskRepository.findById(obj.getId());
+		
+		//task.setComments(obj.getComments());
 
 		// wfwProcessRepository.
 		// 更新为已处理
-		wfwTaskRepository.updateTaskStatus(id, "1");
+		wfwTaskRepository.updateTaskStatus(String.valueOf(obj.getId()), String.valueOf(obj.getStatus()),obj.getComments());
 		// 查看当前进程
 		WfwProcess process = wfwProcessRepository.findById(Long.parseLong(task.getPid()));
 
@@ -782,6 +795,20 @@ public class WfwActivityController {
 		data.setData(process);
 		return data;
 	}
+	
+	@GetMapping("/getTask/{id}")
+	@ResponseBody
+	public ResultData getTask(@PathVariable String id) {
+		
+		WfwTask task = wfwTaskRepository.findById(Long.parseLong(id));
+		
+		ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(task);
+		return data;
+	}
 
 	/**
 	 * 处理 任务
@@ -836,10 +863,10 @@ public class WfwActivityController {
 	public ResultData getMyTaskTodoList(@CookieValue(value = COOKIE_NAME, defaultValue = "") String auth) {
 
 		UserVO cache = userCache.getCache(auth);
-
 		// if(cache ==null) throw new Exception("");
-
 		List<WfwTask> tasks = wfwTaskRepository.findTodoTask(String.valueOf(cache.getId()), "0");
+		
+		System.err.println("登陆用户 =[" + cache.getEmail() + "]待处理任务=【" + tasks.size()+"]");
 
 		ResultData data = new ResultData();
 		data.setCode(200);
@@ -863,7 +890,8 @@ public class WfwActivityController {
 		UserVO cache = userCache.getCache(auth);
 		List<WfwTask> tasks = wfwTaskRepository.findTodoTask(String.valueOf(cache.getId()), "1");
 		// List<WfwTask> tasks = wfwTaskRepository.findTodoTask("7", "1");
-
+		System.err.println("登陆用户 =[" + cache.getEmail() + "]已处理任务=【" + tasks.size()+"]");
+		
 		ResultData data = new ResultData();
 		data.setCode(200);
 		data.setSuccess(true);
@@ -1098,6 +1126,27 @@ public class WfwActivityController {
 		data.setSuccess(true);
 		data.setMessage("成功");
 		data.setData(process);
+		return data;
+	}
+	
+	/**
+	 * 获取流程的进程
+	 *
+	 * @param user
+	 *            the user
+	 * @return the string
+	 */
+	@GetMapping("/getTaskBypId/{id}")
+	@ResponseBody
+	public ResultData getTaskBypId(@PathVariable String id) {
+
+		List<WfwTask> tasks = wfwTaskRepository.findPorcessTask(id);
+
+		ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(tasks);
 		return data;
 	}
 
@@ -1367,28 +1416,29 @@ public class WfwActivityController {
 									    //如果满足输入值，满足此规则，则走这条分支
 									   if(isOk){
 										   
-										     //给下一个节点 添加任务
-											 addTaskAct(process, wfwActivity);
+										    
 											 //// 设置当前处理节点
 											 process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
 											 process.setCurrentActivityName(wfwActivity.getName());
 											 //process.setNextActivityId(String.valueOf(wfwActivity.getNextActivity()));
 											 
-											    int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), String.valueOf(wfwActivity.getId()));
-												int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), String.valueOf(wfwActivity.getId()));
-												process.setToDoNum(toDoNum);
-												process.setDoneNum(doneNum);
-												//更新计算
-												if(toDoNum == 0 ){
-													process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
-												}else{
-													process.setTaskStatus("审批中");
-												}
+//											    int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), String.valueOf(wfwActivity.getId()));
+//												int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), String.valueOf(wfwActivity.getId()));
+//												process.setToDoNum(toDoNum);
+//												process.setDoneNum(doneNum);
+//												//更新计算
+//												if(toDoNum == 0 ){
+//													process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
+//												}else{
+//													process.setTaskStatus("审批中");
+//												}
 											 
 											 wfwProcessRepository.save(process);
 											
 												
 											 System.err.println("更新当前节点=[" + process.getCurrentActivityId() + "]   名字===["+process.getCurrentActivityName()+"]");
+											 //给下一个节点 添加任务
+											 addTaskAct(process, wfwActivity);
 											 
 									         break;
 									    // 否则 判断下一条	   
@@ -1402,30 +1452,30 @@ public class WfwActivityController {
 					}
 					i++;
 				} else if (ActivityType.APPROVER.getValue().equalsIgnoreCase(current.getActivtiyType())){
-					 //给下一个节点 添加任务
-					 addTaskAct(process, wfwActivity);	
+					
 
 					 //WfwActivity  wfwActivity =   (WfwActivity)nexts.get(0);
 					 System.err.println("后续节点 是 普通审批 =" + wfwActivity.getId() + "+名字===" + wfwActivity.getName());
 					 process.setCurrentActivityName(wfwActivity.getName());
 					 process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
 					 
-				    int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-					int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-					process.setToDoNum(toDoNum);
-					process.setDoneNum(doneNum);
-					//更新计算
-					if(toDoNum == 0 ){
-						process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
-					}else{
-						process.setTaskStatus("审批中");
-					}
+//				    int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//					int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//					process.setToDoNum(toDoNum);
+//					process.setDoneNum(doneNum);
+//					//更新计算
+//					if(toDoNum == 0 ){
+//						process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
+//					}else{
+//						process.setTaskStatus("审批中");
+//					}
 						
 					 //process.setNextActivityId(String.valueOf(wfwActivity.getNextActivity()));
 					 wfwProcessRepository.save(process);
 					 System.err.println("更新当前节点=[" + process.getCurrentActivityId() + "]   名字===["+process.getCurrentActivityName()+"]");
 					
-					
+					 //给下一个节点 添加任务
+					 addTaskAct(process, wfwActivity);	
 				}
 			}
 		
@@ -1532,11 +1582,24 @@ public class WfwActivityController {
 		
 		System.err.println("当前节点=" + process.getCurrentActivityId() + "+找到后续节点个数===" + nexts.size());
 
-		   // 如果后续节点大于1，则表示有分叉
-			if (nexts != null ) {
+		   // 如果后续节点大于1，则表示有下一个节点
+			if (nexts != null && nexts.size() >=1 ) {
 				// 遍历后续节点
 				int i=0;
 				for (WfwActivity wfwActivity : nexts) {
+					
+					//判定是否是结束节点{
+					//WfwActivity end = wfwActivityRepository.findEndByflowId(process.getFlowId());
+					//如果是结束节点
+					if(wfwActivity.getNextActivity() !=null && wfwActivity.getNextActivity().equals(ActivityType.END.getValue())){
+			        	process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
+			        	process.setCurrentActivityName(wfwActivity.getName());
+			        	process.setTaskStatus("已结束");
+			        	wfwProcessRepository.save(process);
+			        	System.err.println("流程结束=" + process.getCurrentActivityId() + "节点名称===" + process.getCurrentActivityName());
+			        	break;
+					}
+					
 					
 					//如果是分叉
 					if(ActivityType.BRANCH.getValue().equalsIgnoreCase(wfwActivity.getActivtiyType())){
@@ -1576,16 +1639,16 @@ public class WfwActivityController {
 											     process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
 											     process.setCurrentActivityName(wfwActivity.getName());
 											     
-											 	int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-												int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-												process.setToDoNum(toDoNum);
-												process.setDoneNum(doneNum);
-												//更新计算
-												if(toDoNum == 0 ){
-													process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
-												}else{
-													process.setTaskStatus("审批中");
-												}
+//											 	int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//												int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//												process.setToDoNum(toDoNum);
+//												process.setDoneNum(doneNum);
+//												//更新计算
+//												if(toDoNum == 0 ){
+//													process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
+//												}else{
+//													process.setTaskStatus("审批中");
+//												}
 												
 												 //process.setNextActivityId(String.valueOf(wfwActivity.getNextActivity()));
 												 wfwProcessRepository.save(process);
@@ -1605,21 +1668,21 @@ public class WfwActivityController {
 												}else{
 													process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
 													process.setCurrentActivityName(wfwActivity.getName());
-													
-												 	int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-													int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-													process.setToDoNum(toDoNum);
-													process.setDoneNum(doneNum);
-													//更新计算
-													if(toDoNum == 0 ){
-														process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
-													}else{
-														process.setTaskStatus("审批中");
-													}
+//													
+//												 	int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//													int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//													process.setToDoNum(toDoNum);
+//													process.setDoneNum(doneNum);
+//													//更新计算
+//													if(toDoNum == 0 ){
+//														process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
+//													}else{
+//														process.setTaskStatus("审批中");
+//													}
 													
 													 //process.setNextActivityId(String.valueOf(wfwActivity.getNextActivity()));
 													 wfwProcessRepository.save(process);
-													 System.err.println("更新当前节点=[" + process.getCurrentActivityId() + "]   名字===["+process.getCurrentActivityName()+"]");
+													 System.err.println("会签不更新 前节点=[" + process.getCurrentActivityId() + "]   名字===["+process.getCurrentActivityName()+"]");
 													 //给下一个节点 添加任务
 													 addTaskAct(process, wfwActivity);
 											         break;
@@ -1635,24 +1698,26 @@ public class WfwActivityController {
 						}
 					}
 					i++;
+				
+					// 如果是审批节点
 				} else if (ActivityType.APPROVER.getValue().equalsIgnoreCase(wfwActivity.getActivtiyType())){
 					
 					 //// 设置当前处理节点
 					   if (ApprovalType.OR.getValue().equals(wfwActivity.getApproveType())) {
 						     System.err.println("或签=====================" + wfwActivity.getApproveType());
-						     process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
-						     process.setCurrentActivityName(wfwActivity.getName());
-							 //process.setNextActivityId(String.valueOf(wfwActivity.getNextActivity()));
-						     int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-								int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-								process.setToDoNum(toDoNum);
-								process.setDoneNum(doneNum);
-								//更新计算
-								if(toDoNum == 0 ){
-									process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
-								}else{
-									process.setTaskStatus("审批中");
-								}
+//						     process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
+//						     process.setCurrentActivityName(wfwActivity.getName());
+//							 //process.setNextActivityId(String.valueOf(wfwActivity.getNextActivity()));
+//						       int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//								int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//								process.setToDoNum(toDoNum);
+//								process.setDoneNum(doneNum);
+//								//更新计算
+//								if(toDoNum == 0 ){
+//									process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
+//								}else{
+//									process.setTaskStatus("审批中");
+//								}
 								
 							 wfwProcessRepository.save(process);
 							 System.err.println("更新当前节点=[" + process.getCurrentActivityId() + "]   名字===["+process.getCurrentActivityName()+"]");
@@ -1672,16 +1737,16 @@ public class WfwActivityController {
 								process.setCurrentActivityId(String.valueOf(wfwActivity.getId()));
 								process.setCurrentActivityName(wfwActivity.getName());
 								 //process.setNextActivityId(String.valueOf(wfwActivity.getNextActivity()));
-								int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-								int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
-								process.setToDoNum(toDoNum);
-								process.setDoneNum(doneNum);
-								//更新计算
-								if(toDoNum == 0 ){
-									process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
-								}else{
-									process.setTaskStatus("审批中");
-								}
+//								int toDoNum =  wfwTaskRepository.findTaskNotFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//								int doneNum =  wfwTaskRepository.findTaskFinish(String.valueOf(process.getId()), process.getCurrentActivityId());
+//								process.setToDoNum(toDoNum);
+//								process.setDoneNum(doneNum);
+//								//更新计算
+//								if(toDoNum == 0 ){
+//									process.setTaskStatus(process.getCurrentActivityName()+"[已完成]");
+//								}else{
+//									process.setTaskStatus("审批中");
+//								}
 								
 								 wfwProcessRepository.save(process);
 								 System.err.println("更新当前节点=[" + process.getCurrentActivityId() + "]   名字===["+process.getCurrentActivityName()+"]");

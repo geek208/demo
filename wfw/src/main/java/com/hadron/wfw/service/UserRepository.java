@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.hadron.wfw.model.User;
+import com.hadron.wfw.model.SysUser;
 
 
 /**
@@ -18,20 +18,23 @@ import com.hadron.wfw.model.User;
  * @email xuychao@163.com  git@github.com:geek208/wfw.git
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<SysUser, Integer> {
 	
 	@Query(value = "select * from t_wfw_user  WHERE role_id =?1",nativeQuery = true)
-	List <User>   findUserByRole(String  userId);
+	List <SysUser>   findUserByRole(String  userId);
 	
 	@Query(value = "select * from t_wfw_user  WHERE position_id =?1",nativeQuery = true)
-	List <User>   findUserByPosition(String  userId);
+	List <SysUser>   findUserByPosition(String  userId);
 	
 	@Query(value = "select * from t_wfw_user  WHERE job_id =?1",nativeQuery = true)
-	List <User>   findUserByJob(String  userId);
+	List <SysUser>   findUserByJob(String  userId);
 	
 	@Query(value = "select * from t_wfw_user  WHERE org_id =?1",nativeQuery = true)
-	List <User>   findUserByOrg(String  userId);
+	List <SysUser>   findUserByOrg(String  userId);
 	
-	User findById(int id);
+	@Query(value = "select * from t_wfw_user  WHERE email =?1",nativeQuery = true)
+	SysUser   findUserByName(String  email);
+	
+	SysUser findById(int id);
 	
 }

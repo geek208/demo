@@ -89,6 +89,11 @@ public interface WfwActivityRepository extends JpaRepository<WfwActivity, Long> 
 	List<Map<String,String>>  findRulesById(String  activityId);
 	
 	
+	//找到处理人
+	@Query(value = "select  * from t_wfw_activity a  WHERE a.flow_id =?1 AND next_activity =0 ",nativeQuery = true )
+	WfwActivity  findEnd(String  flowId);
+
+	
 	void save(WfwLink link);
 	
 

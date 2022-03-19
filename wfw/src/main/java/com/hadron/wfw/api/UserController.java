@@ -3,13 +3,16 @@ package com.hadron.wfw.api;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.hadron.app.PlatformApp;
+import com.hadron.app.PlatformAppRepository;
 import com.hadron.wfw.Result;
 import com.hadron.wfw.ResultData;
 import com.hadron.wfw.Utils;
 import com.hadron.wfw.cache.UserCache;
-import com.hadron.wfw.model.User;
+import com.hadron.wfw.model.SysUser;
 import com.hadron.wfw.model.UserVO;
 import com.hadron.wfw.model.WfwFlow;
+import com.hadron.wfw.model.WfwRole;
 import com.hadron.wfw.model.WfwUser;
 import com.hadron.wfw.service.UserRepository;
 import com.hadron.wfw.service.UserService;
@@ -37,6 +40,10 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    PlatformAppRepository platformAppRepository;
+  
+    
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -50,7 +57,7 @@ public class UserController {
     	log.debug("pre md5Hex{} after {}"+user.getPassword(),DigestUtils.md5Hex(StringUtils.trim(user.getPassword())));
         user.setPassword(DigestUtils.md5Hex(StringUtils.trim(user.getPassword())));
         
-        User loginUser = userService.login(user);
+        SysUser loginUser = userService.login(user);
         UserVO userVO = loginUser.toVO(UserVO.class);
         String cKey = Utils.getCharAndNum(10);
         Cookie cookie = new Cookie(COOKIE_NAME, cKey);
@@ -101,7 +108,7 @@ public class UserController {
 	@ResponseBody
 	public ResultData getUserList() {
 
-		List<User> users = userRepository.findAll();
+		List<SysUser> users = userRepository.findAll();
 
 		// WfwFormV formV =new WfwFormV();
 		// formV.setFormfield(formField);
@@ -112,6 +119,58 @@ public class UserController {
 		data.setData(users);
 		return data;
 	}
+	
+    /**
+	 * 获取表单
+	 *
+	 * @param user
+	 *            the user
+	 * @return the string
+	 */
+	@RequestMapping("/appList")
+	@ResponseBody
+	public ResultData getAppList() {
+
+		List<PlatformApp> users = platformAppRepository.findAll();
+
+		// WfwFormV formV =new WfwFormV();
+		// formV.setFormfield(formField);
+		ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(users);
+		return data;
+	}
+	
+	 /**
+     * Add string.
+     *
+     * @param user the user
+     * @return the string
+     * @throws Exception 
+     */
+    @RequestMapping("/createApp")
+	@ResponseBody
+    public ResultData createApp(PlatformApp role) throws Exception {
+    	platformAppRepository.save(role);
+       // producer.send();
+        
+   	    // 声明httpPost请求
+        //HttpPost httpPost = new HttpPost("http://www.baidu.com");
+		//httpClient.execute(httpPost);
+		//httpAPIService.doGet("http://www.baidu.com");
+		//httpAPIService.doGet("http://10.0.0.79:30093/apm/add?id="+user.getId()+"&userName="+user.getUserName()+"&password=1&age=1");
+		//httpAPIService.doGet("http://10.0.0.79:30095/mall/addOrder?id="+user.getId()+"&name="+user.getUserName()+"&money=2&fee=2");
+        //return gson.toJson("200");
+    	ResultData data = new ResultData();
+		data.setCode(200);
+		data.setSuccess(true);
+		data.setMessage("成功");
+		data.setData(role);
+		return data;
+     
+    }
     
     /**
      * cache
@@ -141,7 +200,7 @@ public class UserController {
      */
     @RequestMapping("/createUser")
 	@ResponseBody
-    public ResultData createUser(@RequestBody User user) throws Exception {
+    public ResultData createUser(@RequestBody SysUser user) throws Exception {
     	
     	
     	log.debug("pre md5Hex{} after {}"+user.getPassword(),DigestUtils.md5Hex(StringUtils.trim(user.getPassword())));
