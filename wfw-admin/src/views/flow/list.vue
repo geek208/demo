@@ -15,17 +15,24 @@
         </template>
      </el-table-column>
 
-        <el-table-column width="150px" align="center" label="类型">
+        <el-table-column width="150px" align="center" label="创建时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createDate }}</span>
+        </template>
+     </el-table-column>
+
+      <!-- <el-table-column width="150px" align="center" label="类型">
         <template slot-scope="scope">
           <span>{{ scope.row.flowType }}</span>
         </template>
-      </el-table-column>
-        <el-table-column width="150px" align="center" label="创建者">
+      </el-table-column> -->
+
+        <el-table-column width="100px" align="center" label="创建者">
         <template slot-scope="scope">
           <span>{{ scope.row.userId }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="状态">
+      <el-table-column width="50px" align="center" label="状态">
         <template slot-scope="scope">
           <span>{{ scope.row.status }}</span>
         </template>

@@ -260,6 +260,91 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/platform',
+    component: Layout,
+    redirect: '/platform/list',
+    name: '应用管理',
+    meta: {
+      title: '应用管理',
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/adminUser/create'),
+        name: '应用列表',
+        meta: { title: '创建应用', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/adminUser/edit'),
+        name: '应用列表',
+        meta: { title: '应用列表' , roles: ['admin'], icon: 'edit' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/adminUser/list'),
+        name: '应用列表',
+        meta: { title: '应用列表', icon: 'list' }
+      }
+    ]
+  },
+  {
+    path: '/template',
+    component: Layout,
+    redirect: '/template/list',
+    name: '智能算薪',
+    meta: {
+      title: '智能算薪',
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/template/create'),
+        name: '创建模板',
+        meta: { title: '创建模板', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/template/edit'),
+        name: '编辑模板',
+        meta: { title: '编辑模板' , roles: ['admin'], icon: 'edit' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/template/list'),
+        name: '模板列表',
+        meta: { title: '模板列表', icon: 'list' }
+      },
+      {
+        path: 'listitem/:id(\\d+)',
+        component: () => import('@/views/salary/list'),
+        name: '查看薪资',
+        meta: { title: '查看薪资', roles: ['admin'] },
+        hidden: true
+      },
+      {
+        path: 'edititem/:id(\\d+)',
+        component: () => import('@/views/salary/edit'),
+        name: '编辑薪资项',
+        meta: { title: '编辑薪资项' , roles: ['admin'], icon: 'edit' },
+        hidden: true
+      },
+      {
+        path: 'startprocess/:id(\\d+)',
+        component: () => import('@/views/salary/startprocess'),
+        name: '薪资计算',
+        meta: { title: '薪资计算' , roles: ['admin'], icon: 'edit' },
+        hidden: true
+      },
+    ]
+  },
+  {
     path: '/flow',
     component: Layout,
     redirect: '/server/list',
@@ -391,7 +476,21 @@ export const asyncRoutes = [
         component: () => import('@/views/task/donelist'),
         name: '已处理',
         meta: { title: '已处理', icon: 'list',roles: ['admin'] }
-      }
+      },
+      {
+        path: 'processtasklist/:id(\\d+)',
+        component: () => import('@/views/task/processtasklist'),
+        name: '进程任务列表',
+        meta: { title: '进程任务列表', roles: ['vip'] },
+        hidden: true
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/task/edit'),
+        name: '处理任务',
+        meta: { title: '处理任务', roles: ['vip'] },
+        hidden: true
+      },
 
     ]
   },

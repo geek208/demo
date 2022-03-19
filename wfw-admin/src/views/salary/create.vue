@@ -1,5 +1,5 @@
 <template>
-  <massage-content-detail :is-edit="true" />
+  <Massage-content-detail :is-edit="false" />
 </template>
 
 <script>
@@ -11,4 +11,3 @@ export default {
   components: { MassageContentDetail }
 }
 </script>
-

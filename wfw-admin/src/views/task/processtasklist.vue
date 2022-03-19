@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { listDoneTask, deleteMessage,addMessage } from '@/api/task'
+import { listProcessTask, deleteMessage,addMessage } from '@/api/task'
 // import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 const defaultForm = {
   name: '111111',
@@ -98,8 +98,9 @@ export default {
     }
   },
   created() {
-    //alert()
-    this.getList()
+    const id = this.$route.params && this.$route.params.id
+    //alert(id)
+    this.getList(id)
   },
   methods: {
     handleDelete(id) {
@@ -122,10 +123,10 @@ export default {
         })
       })
     },
-    getList() {
+    getList(id) {
       //this.listLoading = true
       //alert()
-      listDoneTask(this.listQuery).then(response => {
+      listProcessTask(id).then(response => {
         //alert(response.data)
        // console.info(response.obj.content)
         this.list = response.data

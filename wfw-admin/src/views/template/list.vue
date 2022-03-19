@@ -2,56 +2,53 @@
   <div class="app-container">
   
     <el-table  :data="list" border fit highlight-current-row style="width: 100%">
-       
-     <el-table-column width="100px" align="center" label="任务id">
+    
+    <el-table-column width="100px" align="center" label="模板id">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
      </el-table-column>
-     
-      <el-table-column width="100px" align="center" label="任务名称">
+
+      <el-table-column width="100px" align="center" label="模板名称">
         <template slot-scope="scope">
-          <span>{{ scope.row.taskName }}</span>
+          <span>{{ scope.row.tempalteName }}</span>
         </template>
      </el-table-column>
 
-      <el-table-column width="100px" align="center" label="创建时间">
+        <el-table-column width="150px" align="center" label="企业ID">
         <template slot-scope="scope">
-          <span>{{ scope.row.createDate }}</span>
-        </template>
-     </el-table-column>
-
-        <el-table-column width="100px" align="center" label="流程名称">
-        <template slot-scope="scope">
-          <span>{{ scope.row.flowId }}</span>
+          <span>{{ scope.row.cpyId }}</span>
         </template>
       </el-table-column>
 
-
-        <el-table-column width="100px" align="center" label="进程名">
+      <el-table-column width="150px" align="center" label="计薪周期">
         <template slot-scope="scope">
-          <span>{{ scope.row.pid }}</span>
+          <span>{{ scope.row.circle }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" align="center" label="状态">
+       
+       
+
+      <el-table-column width="150px" align="center" label="状态">
         <template slot-scope="scope">
           <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
 
-       <el-table-column width="250px" align="center" label="处理意见">
+       <el-table-column align="center" label="Actions" width="550">
         <template slot-scope="scope">
-          <span>{{ scope.row.comments }}</span>
-        </template>
-      </el-table-column>
-
-       <el-table-column align="center" label="Actions" width="241">
-        <template slot-scope="scope">
-          <!-- <router-link :to="'/process/list/'+scope.row.id">
+         
+          <router-link :to="'/template/startprocess/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              发起申请
+              薪资计算
             </el-button>
-          </router-link> -->
+          </router-link>
+
+           <router-link :to="'/template/listitem/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-edit">
+              查看薪资项
+            </el-button>
+          </router-link>
 
         <!-- <router-link :to="'/process/list/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
@@ -59,11 +56,17 @@
             </el-button>
           </router-link> -->
 
-          <!-- <router-link :to="'/flow/edit/'+scope.row.id">
+          <router-link :to="'/activity/list/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              Edit
+              添加算薪人员
             </el-button>
-          </router-link> -->
+          </router-link>
+
+          <router-link :to="'/form/listformfield/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-edit">
+              查看表单
+            </el-button>
+          </router-link>
           
           <el-button type="danger" size="small" @click="handleDelete(scope.row.id)">Delete</el-button>
         </template>
@@ -74,7 +77,7 @@
 </template>
 
 <script>
-import { listDoneTask, deleteMessage,addMessage } from '@/api/task'
+import { listFlow, deleteMessage,addMessage } from '@/api/template'
 // import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 const defaultForm = {
   name: '111111',
@@ -125,7 +128,7 @@ export default {
     getList() {
       //this.listLoading = true
       //alert()
-      listDoneTask(this.listQuery).then(response => {
+      listFlow(this.listQuery).then(response => {
         //alert(response.data)
        // console.info(response.obj.content)
         this.list = response.data

@@ -1,70 +1,65 @@
 <template>
   <div class="app-container">
-  
     <el-table  :data="list" border fit highlight-current-row style="width: 100%">
-       
-     <el-table-column width="100px" align="center" label="任务id">
+    
+     <el-table-column width="100px" align="center" label="用户ID">
+        <template slot-scope="scope">
+          <span>{{ scope.row.userId }}</span>
+        </template>
+     </el-table-column>
+
+    <el-table-column width="100px" align="center" label="模板id">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
      </el-table-column>
-     
-      <el-table-column width="100px" align="center" label="任务名称">
+
+      <el-table-column width="100px" align="center" label="模板名称">
         <template slot-scope="scope">
-          <span>{{ scope.row.taskName }}</span>
+          <span>{{ scope.row.fieldName }}</span>
         </template>
      </el-table-column>
 
-      <el-table-column width="100px" align="center" label="创建时间">
+      <el-table-column width="150px" align="center" label="字段值">
         <template slot-scope="scope">
-          <span>{{ scope.row.createDate }}</span>
-        </template>
-     </el-table-column>
-
-        <el-table-column width="100px" align="center" label="流程名称">
-        <template slot-scope="scope">
-          <span>{{ scope.row.flowId }}</span>
+          <span>{{ scope.row.fieldValue }}</span>
         </template>
       </el-table-column>
 
-
-        <el-table-column width="100px" align="center" label="进程名">
+      <el-table-column width="150px" align="center" label="数据源">
         <template slot-scope="scope">
-          <span>{{ scope.row.pid }}</span>
+          <span>{{ scope.row.reffieldTable }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" align="center" label="状态">
+
+      <el-table-column width="150px" align="center" label="字段名">
+        <template slot-scope="scope">
+          <span>{{ scope.row.fieldName }}</span>
+        </template>
+      </el-table-column>
+ 
+       
+
+      <el-table-column width="150px" align="center" label="状态">
         <template slot-scope="scope">
           <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
 
-       <el-table-column width="250px" align="center" label="处理意见">
+       <el-table-column align="center" label="Actions" width="550">
         <template slot-scope="scope">
-          <span>{{ scope.row.comments }}</span>
-        </template>
-      </el-table-column>
-
-       <el-table-column align="center" label="Actions" width="241">
-        <template slot-scope="scope">
-          <!-- <router-link :to="'/process/list/'+scope.row.id">
+         
+          <router-link :to="'/template/startprocess/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              发起申请
+              导出
             </el-button>
-          </router-link> -->
+          </router-link>
 
-        <!-- <router-link :to="'/process/list/'+scope.row.id">
+           <router-link :to="'/template/listitem/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              查看流程
+              查看薪资项
             </el-button>
-          </router-link> -->
-
-          <!-- <router-link :to="'/flow/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              Edit
-            </el-button>
-          </router-link> -->
-          
+          </router-link>
           <el-button type="danger" size="small" @click="handleDelete(scope.row.id)">Delete</el-button>
         </template>
       </el-table-column>
@@ -74,7 +69,7 @@
 </template>
 
 <script>
-import { listDoneTask, deleteMessage,addMessage } from '@/api/task'
+import { startprocess, deleteMessage,postfields } from '@/api/salary'
 // import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 const defaultForm = {
   name: '111111',
@@ -88,7 +83,8 @@ export default {
   data() {
     return {
       list: null,
-      // postForm: Object.assign({}, defaultForm),
+      pid:null,
+      postForm: Object.assign({}, defaultForm),
       // total: 0,
       // listLoading: true,
       // listQuery: {
@@ -99,7 +95,8 @@ export default {
   },
   created() {
     //alert()
-    this.getList()
+    const id = this.$route.params && this.$route.params.id
+    this.getList(id)
   },
   methods: {
     handleDelete(id) {
@@ -122,18 +119,42 @@ export default {
         })
       })
     },
-    getList() {
+    getList(id) {
       //this.listLoading = true
-      //alert()
-      listDoneTask(this.listQuery).then(response => {
-        //alert(response.data)
+      alert()
+      startprocess(id).then(response => {
+        alert(response.data)
        // console.info(response.obj.content)
         this.list = response.data
+        this.pid  = response.data.pId 
         //this.total = response.obj.total
        // this.listLoading = false
       })
     },
- 
+
+    putList(){
+            console.log(this.list)
+            // alert(this.list)
+            // jsonList 就是前端普通的实体类集合数据
+            //alert(this.pid)
+          var req =  postfields(this.list)
+          req.then(response => {
+           // console.log('addserver chenggong !' + response)
+            this.$notify({
+              title: '成功',
+              message: '提交成功',
+              type: 'success',
+              duration: 2000
+            })
+          }).catch(err => {
+            console.log(err)
+          }).finally(() => {
+            //this.loading = false
+          })
+
+        }
+
+
   }
 }
 </script>

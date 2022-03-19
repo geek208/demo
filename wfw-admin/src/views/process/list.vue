@@ -3,7 +3,7 @@
   
     <el-table  :data="list" border fit highlight-current-row style="width: 100%">
     
-    <el-table-column width="100px" align="center" label="进程id">
+    <el-table-column width="50px" align="center" label="进程id">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -15,32 +15,53 @@
         </template>
      </el-table-column>
 
-        <el-table-column width="150px" align="center" label="流程名称">
+        <el-table-column width="150px" align="center" label="创建时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createDate }}</span>
+        </template>
+     </el-table-column>
+
+        <el-table-column width="50px" align="center" label="流程名称">
         <template slot-scope="scope">
           <span>{{ scope.row.flowId }}</span>
         </template>
       </el-table-column>
 
-
-      <el-table-column width="150px" align="center" label="当前节点">
+      <el-table-column width="50px" align="center" label="当前节点">
         <template slot-scope="scope">
           <span>{{ scope.row.currentActivityId }}</span>
         </template>
       </el-table-column>
 
-      
-      <el-table-column width="150px" align="center" label="当前节点名称">
+      <el-table-column width="100px" align="center" label="当前节点名称">
         <template slot-scope="scope">
           <span>{{ scope.row.currentActivityName }}</span>
         </template>
       </el-table-column>
 
+          <el-table-column width="100px" align="center" label="当前任务状态">
+        <template slot-scope="scope">
+          <span>{{ scope.row.taskStatus }}</span>
+        </template>
+      </el-table-column>
 
-    <el-table-column width="150px" align="center" label="后续节点">
+      <el-table-column width="50px" align="center" label="待处理/已处理">
+        <template slot-scope="scope">
+          <span>{{ scope.row.toDoNum }}/{{ scope.row.doneNum }}</span>
+        </template>
+      </el-table-column>
+
+     <el-table-column width="150px" align="center" label="处理意见">
+        <template slot-scope="scope">
+          <span>{{ scope.row.comments }}</span>
+        </template>
+      </el-table-column>
+
+    <!-- <el-table-column width="150px" align="center" label="后续节点">
         <template slot-scope="scope">
           <span>{{ scope.row.nextActivityId }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="50px" align="center" label="状态">
         <template slot-scope="scope">
@@ -50,18 +71,19 @@
 
        <el-table-column align="center" label="Actions" width="300">
         <template slot-scope="scope">
-          <router-link :to="'/process/list/'+scope.row.id">
+
+          <!-- <router-link :to="'/process/list/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               查看审批者
             </el-button>
-          </router-link>
+          </router-link> -->
         <!-- <router-link :to="'/process/list/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               查看流程
             </el-button>
           </router-link> -->
 
-          <router-link :to="'/flow/edit/'+scope.row.id">
+          <router-link :to="'/task/processtasklist/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               查看任务
             </el-button>

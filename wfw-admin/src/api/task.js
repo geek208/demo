@@ -23,9 +23,9 @@ export function updateMessage(data) {
  * 获取一个server
  * @param {} id
  */
-export function getMessage(id) {
+export function getTask(id) {
   return request({
-    url: `message/${id}`,
+    url: `/wfwactivity/getTask/${id}`,
     method: 'get'
   })
 }
@@ -58,6 +58,18 @@ export function listTodoTask(page) {
 }
 
 /**
+ * list
+ * @param {int}} page
+ * @param {int} pageSize
+ */
+ export function listProcessTask(id) {
+  return request({
+    url: `/wfwactivity/getTaskBypId/${id}`,
+    method: 'get',
+     })
+}
+
+/**
  * 删除
  * @param {*} id
  */
@@ -72,9 +84,10 @@ export function deleteMessage(id) {
  * 删除
  * @param {*} id
  */
- export function dotask(id) {
+ export function dotask(data) {
   return request({
-    url: `/wfwactivity/dotask/${id}`,
-    method: 'get',
+    url: `/wfwactivity/doTask`,
+    method: 'post',
+    data
    })
 }

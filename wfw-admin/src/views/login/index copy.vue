@@ -322,23 +322,6 @@ export default {
    created() {
        this.regForm.inviteCode = this.$route.query.inviteCode
   },
-  mounted () {
-    let authCodeURL = window.location.href
-    this.code = authCodeURL.substring(authCodeURL.indexOf('code'), authCodeURL.indexOf('&'))
-    this.$post('authLogin', {
-      code: this.code
-    }).then((r) => {
-      let data = r.data.data
-      console.log('data:' + data)
-      this.saveLoginData(data)
-      this.loading = false
-      this.$router.push('/')
-    }).catch(() => {
-      setTimeout(() => {
-        this.loading = false
-      }, 500)
-    })
-  },
   watch: {
     $route: {
       handler: function(route) {

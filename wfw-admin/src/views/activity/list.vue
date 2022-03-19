@@ -47,11 +47,11 @@
         </template>
       </el-table-column>
 
-    <el-table-column width="50px" align="center" label="后续节点">
+    <!-- <el-table-column width="50px" align="center" label="后续节点">
         <template slot-scope="scope">
           <span>{{ scope.row.nextActivity }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="50px" align="center" label="状态">
         <template slot-scope="scope">

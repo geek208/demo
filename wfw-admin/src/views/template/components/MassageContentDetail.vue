@@ -5,28 +5,23 @@
       <!-- <el-form-item label="key描述" prop="name">
         <el-input v-model="postForm.vname" />
       </el-form-item> -->
-      <el-form-item label="任务名称" prop="id">
-        <el-input v-model="postForm.id" />
-      </el-form-item>
 
-
-      <el-form-item label="任务名称" prop="taskName">
-        <el-input v-model="postForm.taskName" />
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="postForm.name" />
       </el-form-item>
 
       <!-- <el-form-item label="内容" prop="messageContent">
         <el-input v-model="postForm.messageContent" />
       </el-form-item> -->
 
-        <el-form-item label="审批意见" prop="comments">
-        <el-input type="textarea" style="height：400px" v-model="postForm.comments" />
+        <el-form-item label="内容" prop="status">
+        <el-input type="textarea" style="height：400px" v-model="postForm.status" />
       </el-form-item>
 
     <el-form-item>
       <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-        拒绝
+        提交
       </el-button>
-      <el-button type="primary" size="small" @click="dotask('1')">同意</el-button>
       </el-form-item>
 
     </el-form>
@@ -34,11 +29,11 @@
 </template>
 
 <script>
-import { dotask, getTask, updateMessage } from '@/api/task'
+import { addMessage, getMessage, updateMessage } from '@/api/message'
 const defaultForm = {
-  name: '',
-  key: '',
-  value: 'true',
+  vname: '',
+  vkey: '',
+  svalue: 'true',
 
 }
 const defaultRules = {
@@ -82,8 +77,8 @@ export default {
   methods: {
     fetchData(id) {
       console.log('msg get id ' + id)
-      getTask(id).then(response => {
-        this.postForm = response.data
+      getMessage(id).then(response => {
+        this.postForm = response.obj
 
       })
     },
@@ -111,34 +106,7 @@ export default {
           return false
         }
       })
-    },
-    
-    dotask(id) {
-      
-      this.$confirm('审批, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        //alert(id)
-
-        this.postForm.status =id
-        dotask(this.postForm).then(() => {
-          this.$message({
-            type: 'success',
-            message: '审批成功!'
-          })
-          this.getList()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
-        })
-      })
-    },
-
-
+    }
   }
 }
 

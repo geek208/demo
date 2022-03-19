@@ -180,63 +180,63 @@ export default {
         console.log(this.postForm )
         alert(response.data.userType)
 
-        // //渲染字段
-        // getfieldList(response.data.flowId).then(response => {
-        //        let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
-        //         //alert(obj)
-        //         for(let i in obj){
-        //               console.log(i,obj[i])
-        //               this.$set(this.options_rules, i, { value:  obj[i].id, label:  obj[i].name});
-        //           //alert(this.options_num[i].lable)
-        //           //this.$set(this.$levelOptions, i, parseInt(i) + 1);
-        //           //this.$forceUpdate()
-        //         }
+        //渲染字段
+        getfieldList(response.data.flowId).then(response => {
+               let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
+                //alert(obj)
+                for(let i in obj){
+                      console.log(i,obj[i])
+                      this.$set(this.options_rules, i, { value:  obj[i].id, label:  obj[i].name});
+                  //alert(this.options_num[i].lable)
+                  //this.$set(this.$levelOptions, i, parseInt(i) + 1);
+                  //this.$forceUpdate()
+                }
                     
-        // });
+        });
 
-        // if(response.data.userType == 0){
-        //       getUsers(id).then(response => {
-        //                   let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
-        //                   for(let i in obj){
-        //                         console.log(i,obj[i])
-        //                         this.$set(this.options_num, i, { value:  obj[i].id, label:  obj[i].userName});
-        //                         //alert(this.options_num[i].lable)
-        //                         //this.$set(this.$levelOptions, i, parseInt(i) + 1);
-        //                         //this.$forceUpdate()
-        //                   }
+        if(response.data.userType == 0){
+              getUsers(id).then(response => {
+                          let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
+                          for(let i in obj){
+                                console.log(i,obj[i])
+                                this.$set(this.options_num, i, { value:  obj[i].id, label:  obj[i].userName});
+                                //alert(this.options_num[i].lable)
+                                //this.$set(this.$levelOptions, i, parseInt(i) + 1);
+                                //this.$forceUpdate()
+                          }
                     
-        //                 })
-        // //
-        // } 
-        // if(response.data.userType == 1){
-        //     //alert('角色')
-        //     getRoles(id).then(response => {
-        //                   //this.postForm = response.data
-        //                   //alert(response.data)
-        //                   let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
-        //                   for(let i in obj){
-        //                         console.log(i,obj[i])
-        //                         this.$set(this.options_num, i, { value:  obj[i].id, label:  obj[i].roleName});
-        //                         //alert(this.options_num[i].lable)
-        //                         //this.$set(this.$levelOptions, i, parseInt(i) + 1);
-        //                         //this.$forceUpdate()
-        //                   }
-        //     })
-        // }else{
-        //     //alert('部门')
-        //     getOrgs(id).then(response => {
-        //                   //this.postForm = response.data
-        //                   //alert(response.data)
-        //                   let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
-        //                   for(let i in obj){
-        //                         console.log(i,obj[i])
-        //                         this.$set(this.options_num, i, { value:  obj[i].id, label:  obj[i].orgName});
-        //                         //alert(this.options_num[i].lable)
-        //                         //this.$set(this.$levelOptions, i, parseInt(i) + 1);
-        //                         //this.$forceUpdate()
-        //                   }
-        //     })
-        // }
+                        })
+        //
+        } 
+        if(response.data.userType == 1){
+            //alert('角色')
+            getRoles(id).then(response => {
+                          //this.postForm = response.data
+                          //alert(response.data)
+                          let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
+                          for(let i in obj){
+                                console.log(i,obj[i])
+                                this.$set(this.options_num, i, { value:  obj[i].id, label:  obj[i].roleName});
+                                //alert(this.options_num[i].lable)
+                                //this.$set(this.$levelOptions, i, parseInt(i) + 1);
+                                //this.$forceUpdate()
+                          }
+            })
+        }else{
+            //alert('部门')
+            getOrgs(id).then(response => {
+                          //this.postForm = response.data
+                          //alert(response.data)
+                          let obj=  response.data //{'name':'programmer','age':'22','height':'180'};
+                          for(let i in obj){
+                                console.log(i,obj[i])
+                                this.$set(this.options_num, i, { value:  obj[i].id, label:  obj[i].orgName});
+                                //alert(this.options_num[i].lable)
+                                //this.$set(this.$levelOptions, i, parseInt(i) + 1);
+                                //this.$forceUpdate()
+                          }
+            })
+        }
 
 
       })
@@ -244,31 +244,31 @@ export default {
       
     },
 
-    // submitForm() {
-    //   console.log(this.postForm)
-    //   this.$refs.postForm.validate(valid => {
-    //     if (valid) {
-    //       this.loading = true
-    //       var req = this.isEdit ? updateActivity(this.postForm) : addMessage(this.postForm)
-    //       req.then(response => {
-    //        // console.log('addserver chenggong !' + response)
-    //         this.$notify({
-    //           title: '成功',
-    //           message: '提交成功',
-    //           type: 'success',
-    //           duration: 2000
-    //         })
-    //       }).catch(err => {
-    //         console.log(err)
-    //       }).finally(() => {
-    //         this.loading = false
-    //       })
-    //     } else {
-    //       console.log('error submit!!')
-    //       return false
-    //     }
-    //   })
-    // }
+    submitForm() {
+      console.log(this.postForm)
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          var req = this.isEdit ? updateActivity(this.postForm) : addMessage(this.postForm)
+          req.then(response => {
+           // console.log('addserver chenggong !' + response)
+            this.$notify({
+              title: '成功',
+              message: '提交成功',
+              type: 'success',
+              duration: 2000
+            })
+          }).catch(err => {
+            console.log(err)
+          }).finally(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
 
 
   },

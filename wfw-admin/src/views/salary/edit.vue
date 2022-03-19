@@ -1,5 +1,5 @@
 <template>
-  <massage-content-detail :is-edit="true" />
+  <Massage-content-detail :is-edit="true" />
 </template>
 
 <script>
