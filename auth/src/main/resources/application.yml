@@ -1,0 +1,87 @@
+server:
+  servlet:
+    context-path: /
+  port: 8080
+spring:
+  kafka:
+    bootstrap-servers: 10.0.0.74:9092
+    #生产者的配置，大部分我们可以使用默认的，这里列出几个比较重要的属性
+    producer:
+      #每批次发送消息的数量
+      batch-size: 16
+      #设置大于0的值将使客户端重新发送任何数据，一旦这些数据发送失败。注意，这些重试与客户端接收到发送错误时的重试没有什么不同。允许重试将潜在的改变数据的顺序，如果这两个消息记录都是发送到同一个partition，则第一个消息失败第二个发送成功，则第二条消息会比第一条消息出现要早。
+      retries: 0
+      #producer可以用来缓存数据的内存大小。如果数据产生速度大于向broker发送的速度，producer会阻塞或者抛出异常，以“block.on.buffer.full”来表明。这项设置将和producer能够使用的总内存相关，但并不是一个硬性的限制，因为不是producer使用的所有内存都是用于缓存。一些额外的内存会用于压缩（如果引入压缩机制），同样还有一些用于维护请求。
+      buffer-memory: 33554432
+      #key序列化方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #消费者的配置
+    consumer:
+      #Kafka中没有初始偏移或如果当前偏移在服务器上不再存在时,默认区最新 ，有三个选项 【latest, earliest, none】
+      auto-offset-reset: latest
+      #是否开启自动提交
+      enable-auto-commit: true
+      #自动提交的时间间隔
+      auto-commit-interval: 100
+      #key的解码方式
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #value的解码方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #在/usr/local/etc/kafka/consumer.properties中有配置
+      group-id: test-consumer-group
+  redis:
+      host: 10.0.0.74
+      #redis密码，没有密码的可以用～表示
+      password: 123456
+      port: 30379
+      pool:
+        max-active: 100
+        max-idle: 10
+        max-wait: 100000
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+    password: '123456'
+    #url: jdbc:sqlite:/opt/jar/db/admin.db
+    #url: jdbc:mysql://10.0.0.74:3306/apm?characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://192.168.1.114:3306/apm?characterEncoding=utf8&useSSL=false
+    username: 'root'
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        #dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect 
+        enable_lazy_load_no_trans: true
+        format_sql: ''
+        show_sql: true
+  bizmate:
+    pay: 'http://10.0.0.148:30093/pay'
+    #order: 'http://10.0.0.148:30092/order'
+    order: 'http://10.0.0.122:8082/order'
+    stock:  'http://10.0.0.148:30094/stock'
+    express: 'http://10.0.0.148:30095/express'
+    mall: 'http://10.0.0.148:30091/mall'
+    
+#auth-server: http://localhost:8080 # 认证服务器地址
+    
+#security:
+#  oauth2:
+#    client:
+#      client-id: client1 # 授权服务器配置的client id
+#      client-secret: 123456 # 授权服务器配置的client secret
+#      scope: test
+#      access-token-uri: ${auth-server}/oauth/token # 获取access token接口
+#      user-authorization-uri: ${auth-server}/oauth/authorize #  获取Authorization Code接口
+#    resource:
+#      token-info-uri: ${auth-server}/oauth/check_token # 验证token的接口
+      
+
